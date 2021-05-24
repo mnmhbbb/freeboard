@@ -1,11 +1,11 @@
 import IRoute from '../interfaces/route';
-import ChangePasswordPage from '../pages/auth/change';
-import ForgotPasswordPage from '../pages/auth/forgot';
-import LoginPage from '../pages/auth/login';
-import LogoutPage from '../pages/auth/logout';
-import RegisterPage from '../pages/auth/register';
+import ChangePasswordPage from '../pages/auth/ChangePasswordPage';
+import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
+import LoginPage from '../pages/auth/LoginPage';
+import LogoutPage from '../pages/auth/LogoutPage';
+import RegisterPage from '../pages/auth/RegisterPage';
 import ResetPasswordPage from '../pages/auth/reset';
-import HomePage from '../pages/home';
+import HomePage from '../pages/HomePage';
 
 const routes: IRoute[] = [
   {

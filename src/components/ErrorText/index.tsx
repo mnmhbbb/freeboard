@@ -1,19 +1,15 @@
 import React from 'react';
 
 export interface IErrorTextProps {
-    error: string;
+  error: string;
 }
 
-const ErrorText: React.FunctionComponent<IErrorTextProps> = props => {
-    const { error } = props;
+const ErrorText: React.FunctionComponent<IErrorTextProps> = (props) => {
+  const { error } = props;
 
-    if (error === '') return null;
+  if (error === '') return null;
 
-    return (
-        <small className="text-danger">
-            {error}
-        </small>
-    );
-}
+  return <small className="text-danger">{error}</small>;
+};
 
 export default ErrorText;

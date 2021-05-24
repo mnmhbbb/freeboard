@@ -7,7 +7,7 @@ import { auth } from '../../config/firebase';
 import logging from '../../config/logging';
 import IPageProps from '../../interfaces/page';
 
-const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
+const RegisterPage: React.FC<IPageProps> = (props) => {
   const [registering, setRegistering] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -18,7 +18,7 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
 
   const signUpWithEmailAndPassword = () => {
     if (password !== confirm) {
-      setError('Please make sure your passwords match.');
+      setError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
@@ -36,11 +36,11 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
         logging.error(error);
 
         if (error.code.includes('auth/weak-password')) {
-          setError('Please enter a stronger password.');
+          setError('비밀번호는 6자리 이상 입력하세요.');
         } else if (error.code.includes('auth/email-already-in-use')) {
-          setError('Email already in use.');
+          setError('이미 등록된 이메일입니다.');
         } else {
-          setError('Unable to register.  Please try again later.');
+          setError('등록할 수 없습니다. 다시 시도해 주십시오.');
         }
 
         setRegistering(false);
@@ -48,13 +48,13 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
   };
 
   return (
-    <AuthContainer header="Register">
+    <AuthContainer header="회원가입">
       <FormGroup>
         <Input
           type="email"
           name="email"
           id="email"
-          placeholder="Email Address"
+          placeholder="이메일"
           onChange={(event) => setEmail(event.target.value)}
           value={email}
         />
@@ -65,7 +65,7 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
           type="password"
           name="password"
           id="password"
-          placeholder="Enter Password"
+          placeholder="비밀번호"
           onChange={(event) => setPassword(event.target.value)}
           value={password}
         />
@@ -76,7 +76,7 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
           type="password"
           name="confirm"
           id="confirm"
-          placeholder="Confirm Password"
+          placeholder="비밀번호 확인"
           onChange={(event) => setConfirm(event.target.value)}
           value={confirm}
         />
@@ -87,11 +87,11 @@ const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
         block
         onClick={() => signUpWithEmailAndPassword()}
       >
-        Sign Up
+        가입하기
       </Button>
       <small>
         <p className="m-1 text-center">
-          Already have an account? <Link to="/login">Login.</Link>
+          이미 회원이신가요? <Link to="/login">로그인</Link>
         </p>
       </small>
       <ErrorText error={error} />
