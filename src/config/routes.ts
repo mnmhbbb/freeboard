@@ -5,14 +5,22 @@ import LoginPage from '../pages/auth/LoginPage';
 import LogoutPage from '../pages/auth/LogoutPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import ResetPasswordPage from '../pages/auth/reset';
-import HomePage from '../pages/HomePage';
+import FirstPage from '../pages/HomePage';
+import MyPage from '../pages/auth/MyPage';
 
 const routes: IRoute[] = [
   {
     path: '/',
     exact: true,
-    component: HomePage,
-    name: 'Home Page',
+    component: FirstPage,
+    name: 'First Page',
+    protected: false,
+  },
+  {
+    path: '/myinfo',
+    exact: true,
+    component: MyPage,
+    name: 'My Page',
     protected: true,
   },
   {

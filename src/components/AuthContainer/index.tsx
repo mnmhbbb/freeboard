@@ -5,7 +5,7 @@ export interface IAuthContainerProps {
   header: any;
 }
 
-const AuthContainer: React.FunctionComponent<IAuthContainerProps> = (props) => {
+const AuthContainer: React.FC<IAuthContainerProps> = (props) => {
   const { children, header } = props;
 
   return (
