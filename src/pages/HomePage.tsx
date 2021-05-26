@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Container } from 'reactstrap';
-import Post from '../components/Post/Post';
-import PostForm from '../components/PostForm/PostForm';
+import Post from '../components/Post';
+import PostForm from '../components/PostForm';
 import { auth } from '../config/firebase';
 import IPageProps from '../interfaces/page';
-
-export interface IUser {
-  uid: string;
-}
 
 const FirstPage: React.FC<IPageProps> = (props) => {
   const [userInfo, setUserInfo] = useState<string>('');
@@ -17,9 +13,11 @@ const FirstPage: React.FC<IPageProps> = (props) => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUserInfo(user.uid);
+      } else {
+        setUserInfo('');
       }
     });
-  }, [userInfo]);
+  }, []);
 
   return (
     <Container>

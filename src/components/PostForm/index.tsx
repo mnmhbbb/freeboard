@@ -2,12 +2,16 @@ import React, { useCallback, useState } from 'react';
 import { Button, Form, Input, Spinner } from 'reactstrap';
 import { firestore } from '../../config/firebase';
 import logging from '../../config/logging';
-import { IUser } from '../../pages/HomePage';
+import { IUser } from '../../interfaces/post';
 
 const PostForm: React.FC<IUser> = (props) => {
   const { uid } = props;
   const [text, setText] = useState<string>('');
   const [posting, setPosting] = useState<boolean>(false);
+
+  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  }, []);
 
   const submitHandler = useCallback(
     async (event: React.FormEvent) => {
@@ -21,20 +25,23 @@ const PostForm: React.FC<IUser> = (props) => {
           text,
         });
         setPosting(false);
+        console.log(text);
+        setText('');
       } catch (error) {
         setPosting(false);
         logging.error(error);
       }
-      console.log(text);
-      setText('');
+      return setPosting(false);
     },
     [text, uid],
   );
 
   return (
     <Form onSubmit={submitHandler}>
-      <Input type="textarea" value={text} onChange={(event) => setText(event.target.value)} />
-      <Button style={{ float: 'right' }}>등록</Button>
+      <Input type="textarea" value={text} onChange={onChange} />
+      <Button disabled={posting} style={{ float: 'right' }}>
+        등록
+      </Button>
       {posting && <Spinner color="info" style={{ float: 'right' }} />}
     </Form>
   );

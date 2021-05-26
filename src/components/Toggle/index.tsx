@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Form, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Form, Input, Modal, ModalBody, ModalFooter, Spinner } from 'reactstrap';
 import { firestore } from '../../config/firebase';
+import logging from '../../config/logging';
 
 interface Props {
   id: string;
@@ -8,36 +9,46 @@ interface Props {
 
 const Toggle: React.FC<Props> = ({ id }) => {
   const [newText, setNewText] = useState<string>('');
-  const [editing, setEditing] = useState<boolean>(false);
+  const [editmode, setEditmode] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(false);
 
   const toggleEdit = useCallback(() => {
-    setEditing(!editing);
-    console.log('toggleedit');
-  }, [editing]);
+    setEditmode(!editmode);
+  }, [editmode]);
 
   const toggleModal = useCallback(() => {
     setModal(!modal);
-    console.log('togglemodal');
   }, [modal]);
 
   const editHandler = useCallback(async () => {
-    await firestore.doc(`post/${id}`).update({
-      text: newText,
-    });
-    setEditing(false);
-    console.log('edit');
+    setEditing(true);
+    try {
+      await firestore.doc(`post/${id}`).update({
+        text: newText,
+      });
+      setEditing(false);
+      setEditmode(false);
+      setNewText('');
+    } catch (error) {
+      setEditing(false);
+      logging.error(error);
+    }
+    return setEditing(false);
   }, [id, newText]);
 
   const deleteHandler = useCallback(async () => {
-    await firestore.doc(`post/${id}`).delete();
-    console.log('deletehandle');
-    return () => setModal(false);
+    try {
+      await firestore.doc(`post/${id}`).delete();
+    } catch (error) {
+      logging.error(error);
+    }
+    return setModal(false);
   }, [id]);
 
   return (
     <>
-      {editing ? (
+      {editmode ? (
         <Form>
           <Input
             type="textarea"
@@ -47,9 +58,10 @@ const Toggle: React.FC<Props> = ({ id }) => {
           <Button style={{ float: 'right' }} onClick={toggleEdit}>
             취소
           </Button>
-          <Button style={{ float: 'right' }} onClick={editHandler}>
+          <Button style={{ float: 'right' }} onClick={editHandler} disabled={editing}>
             수정
           </Button>
+          {editing && <Spinner color="info" />}
         </Form>
       ) : (
         <>
