@@ -13,6 +13,7 @@ const Application: React.FC<IApplicationProps> = (props) => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+      console.log(user?.uid);
       if (user) {
         logging.info('User detected.');
       } else {

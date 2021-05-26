@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li {
+  padding-left: 0;
+  list-style: none;
+}
