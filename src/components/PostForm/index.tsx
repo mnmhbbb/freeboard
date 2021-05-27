@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Form, Input } from 'reactstrap';
+import { Button, Form, Input, Spinner } from 'reactstrap';
 import { firestore } from '../../config/firebase';
 import logging from '../../config/logging';
 import { IUser } from '../../interfaces/post';
@@ -27,8 +27,8 @@ const PostForm: React.FC<IUser> = (props) => {
 
       try {
         console.log(text);
-        setText('');
         await firestore.collection('post').add(addObj);
+        setText('');
       } catch (error) {
         setPosting(false);
         logging.error(error);
@@ -41,10 +41,10 @@ const PostForm: React.FC<IUser> = (props) => {
   return (
     <Form onSubmit={submitHandler}>
       <Input type="textarea" value={text} onChange={onChange} />
+      {posting && <Spinner color="info" style={{ float: 'right' }} />}
       <Button disabled={posting} style={{ float: 'right' }}>
         등록
       </Button>
-      {/* {posting && <Spinner color="info" style={{ float: 'right' }} />} */}
     </Form>
   );
 };
