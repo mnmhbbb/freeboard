@@ -13,9 +13,12 @@ const Toggle: React.FC<Props> = ({ id }) => {
   const [modal, setModal] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
 
-  const toggleEdit = useCallback(() => {
+  const toggleEdit = useCallback(async () => {
+    const current = await firestore.doc(`post/${id}`).get();
+    const data: any = current.data();
     setEditmode(!editmode);
-  }, [editmode]);
+    setNewText(data.text); // 수정할 때 기존 내용 불러오기
+  }, [editmode, id]);
 
   const toggleModal = useCallback(() => {
     setModal(!modal);
@@ -24,12 +27,12 @@ const Toggle: React.FC<Props> = ({ id }) => {
   const editHandler = useCallback(async () => {
     setEditing(true);
     try {
+      setNewText('');
+      setEditmode(false);
       await firestore.doc(`post/${id}`).update({
         text: newText,
       });
       setEditing(false);
-      setEditmode(false);
-      setNewText('');
     } catch (error) {
       setEditing(false);
       logging.error(error);

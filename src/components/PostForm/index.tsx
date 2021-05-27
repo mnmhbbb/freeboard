@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Form, Input, Spinner } from 'reactstrap';
+import { Button, Form, Input } from 'reactstrap';
 import { firestore } from '../../config/firebase';
 import logging from '../../config/logging';
 import { IUser } from '../../interfaces/post';
@@ -15,18 +15,20 @@ const PostForm: React.FC<IUser> = (props) => {
 
   const submitHandler = useCallback(
     async (event: React.FormEvent) => {
-      console.log('submit');
       event.preventDefault();
+      console.log('submit');
       setPosting(true);
+
+      const addObj = {
+        createdAt: Date.now(),
+        userId: uid,
+        text,
+      };
+
       try {
-        await firestore.collection('post').add({
-          createdAt: Date.now(),
-          userId: uid,
-          text,
-        });
-        setPosting(false);
         console.log(text);
         setText('');
+        await firestore.collection('post').add(addObj);
       } catch (error) {
         setPosting(false);
         logging.error(error);
@@ -42,7 +44,7 @@ const PostForm: React.FC<IUser> = (props) => {
       <Button disabled={posting} style={{ float: 'right' }}>
         등록
       </Button>
-      {posting && <Spinner color="info" style={{ float: 'right' }} />}
+      {/* {posting && <Spinner color="info" style={{ float: 'right' }} />} */}
     </Form>
   );
 };
