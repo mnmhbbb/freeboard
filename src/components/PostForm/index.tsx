@@ -16,6 +16,9 @@ const PostForm: React.FC<IUser> = (props) => {
   const submitHandler = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
+      if (text === '') {
+        return;
+      }
       console.log('submit');
       setPosting(true);
 
@@ -33,7 +36,7 @@ const PostForm: React.FC<IUser> = (props) => {
         setPosting(false);
         logging.error(error);
       }
-      return setPosting(false);
+      setPosting(false);
     },
     [text, uid],
   );

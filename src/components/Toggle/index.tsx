@@ -14,11 +14,15 @@ const Toggle: React.FC<Props> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const toggleEdit = useCallback(async () => {
+    if (newText === '') {
+      setLoading(true);
+    }
     const current = await firestore.doc(`post/${id}`).get();
     const data: any = current.data();
     setNewText(data.text); // 수정할 때 기존 내용 불러오기
-    setEditmode(!editmode);
-  }, [editmode, id]);
+    setEditmode(true);
+    return setLoading(false);
+  }, [id, newText]);
 
   // 수정모드 취소하기
   const cancelBtn = useCallback(() => {
@@ -43,13 +47,11 @@ const Toggle: React.FC<Props> = ({ id }) => {
 
   const deleteHandler = useCallback(async () => {
     try {
-      setLoading(true);
       await firestore.doc(`post/${id}`).delete();
     } catch (error) {
       logging.error(error);
     }
-    setLoading(false);
-    return setModal(false);
+    setModal(false);
   }, [id]);
 
   return (
@@ -71,10 +73,7 @@ const Toggle: React.FC<Props> = ({ id }) => {
         </Form>
       ) : (
         <>
-          {loading && <Spinner color="info" />}
-          <Button onClick={toggleEdit} disabled={loading}>
-            수정
-          </Button>
+          <Button onClick={toggleEdit}>수정</Button>
           <Button onClick={toggleModal}>삭제</Button>
         </>
       )}
