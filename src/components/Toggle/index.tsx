@@ -39,6 +39,7 @@ const Toggle: React.FC<Props> = ({ id }) => {
       setEditmode(false);
       await firestore.doc(`post/${id}`).update({
         text: newText,
+        createdAt: Date.now(),
       });
     } catch (error) {
       logging.error(error);
